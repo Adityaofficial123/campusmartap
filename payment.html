@@ -512,12 +512,35 @@ await set(ref(db, `carts/${user.uid}/${customPayId}`), cartProduct);
   </script>
 
   <script>
-    fetch("footer.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("footer-container").innerHTML = data;
+   // Example for dynamic footer loading
+fetch('footer.html')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('footer-container').innerHTML = html;
+    // Re-run the script after footer is loaded
+    const links = {
+      faqLink: "faqSection",
+      returnsLink: "returnsSection",
+      shippingLink: "shippingSection",
+      contactLink: "contactSection"
+    };
 
-      });
+    Object.entries(links).forEach(([linkId, sectionId]) => {
+      const link = document.getElementById(linkId);
+      const section = document.getElementById(sectionId);
+
+      if (link && section) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.querySelectorAll(".footer-info-section").forEach(sec => {
+            sec.style.display = "none";
+          });
+          section.style.display = "block";
+          section.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    });
+  });
   </script>
   <div id="footer-container"></div>
 
