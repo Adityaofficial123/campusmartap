@@ -294,14 +294,35 @@
       <div id="sellerPaymentStatus" style="display:none; margin-top:20px; font-weight:bold;"></div>
   </div>
   <script>
-    fetch("footer.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("footer-container").innerHTML = data;
-        if (typeof loadFooterReviews === "function") {
-          loadFooterReviews();
-        }
-      });
+    // Example for dynamic footer loading
+fetch('footer.html')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('footer-container').innerHTML = html;
+    // Re-run the script after footer is loaded
+    const links = {
+      faqLink: "faqSection",
+      returnsLink: "returnsSection",
+      shippingLink: "shippingSection",
+      contactLink: "contactSection"
+    };
+
+    Object.entries(links).forEach(([linkId, sectionId]) => {
+      const link = document.getElementById(linkId);
+      const section = document.getElementById(sectionId);
+
+      if (link && section) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.querySelectorAll(".footer-info-section").forEach(sec => {
+            sec.style.display = "none";
+          });
+          section.style.display = "block";
+          section.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    });
+  });
   </script>
   <div id="footer-container"></div>
 
