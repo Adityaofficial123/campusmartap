@@ -405,6 +405,21 @@
         console.log("🔥 Submitting payment data:", paymentData);
 
         await set(ref(db, 'payments/' + customPayId), paymentData);
+      
+
+const cartProduct = {
+  product_name: paymentData.productName,
+  price: paymentData.amount,
+  category: product.category,
+  image_url: product.image_url,
+  productId: paymentData.productId,
+  payId: paymentData.payId,
+  buyerConfirmed: false, // for confirmation button in cart
+  timestamp: paymentData.timestamp
+};
+
+// Add to user's cart
+await set(ref(db, `carts/${user.uid}/${customPayId}`), cartProduct);
 
         // ✅ Notify Admin
         emailjs.send("service_e32z7z5", "template_1iq1q95", {
