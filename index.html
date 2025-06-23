@@ -417,7 +417,8 @@ fetch('footer.html')
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       if (!localStorage.getItem('demoPopupShown')) {
-        document.getElementById('demoWelcomePopup').style.display = 'flex';
+        const popup = document.getElementById('demoWelcomePopup');
+if (popup) popup.style.display = 'flex';
         localStorage.setItem('demoPopupShown', 'true');
       }
     });
