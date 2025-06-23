@@ -21,6 +21,99 @@
 
 
 <body>
+
+   <header id="navbar-container">
+    <nav class="market-navbar">
+      <div class="market-navbar__container">
+        <div class="market-navbar__logo" onclick="window.location.href='index.html'">
+          <img src="ekd-logo.png" alt="CampusMart Logo" class="market-navbar__logo-img" />
+          <span class="market-navbar__brand">CampusMart</span>
+        </div>
+<div class="market-navbar__searchbar" id="marketNavbarSearchbar">
+
+          <select class="market-navbar__select" id="categoryFilter" aria-label="Category">
+            <option value="All">All</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books">Books</option>
+            <option value="Calculators">Calculators</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Smartphones">Smartphones</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Beauty">Beauty</option>
+            <option value="Pets">Pets</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Home Essentials">Home Essentials</option>
+            <option value="Art & Craft">Art & Craft</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Sports">Sports</option>
+            <option value="Music">Music</option>
+            <option value="Kitchen">Kitchen</option>
+            <option value="Toys">Toys</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="market-navbar__search-wrapper">
+            <input type="text" class="market-navbar__search" id="searchInput" placeholder="Search products..."
+              aria-label="Search products">
+          </div>
+        </div>
+        <ul class="market-navbar__links" id="marketNavbarLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#shopSection">Shop</a></li>
+          <li><a href="#sell">Sell</a></li>
+        </ul>
+       <div class="market-navbar__actions">
+  <!-- My Orders Button -->
+  <button class="yellow-glass-btn" onclick="window.location.href='cart.html'" title="My Orders">
+    <i class="fa-solid fa-cart-shopping"></i> My Orders
+  </button>
+
+  <!-- User Email -->
+  <span id="userEmail" class="navbar-user-email" style="display: none;"></span>
+
+  <!-- Login Button -->
+  <button id="navbarLoginBtn" class="yellow-glass-btn" style="display: none;">
+    <i class="fa fa-sign-in-alt"></i> Login
+  </button>
+
+  <!-- Logout Button -->
+  <button id="logoutBtn" class="yellow-glass-btn" style="display: none;">
+    <i class="fa fa-sign-out-alt"></i> Logout
+  </button>
+
+  <!-- Install App Button -->
+  <button id="installBtn" class="market-navbar__btn install-btn">
+    <i class="fa-solid fa-download"></i> Install App
+  </button>
+
+  <!-- reCAPTCHA -->
+  <div id="recaptcha-container"></div>
+</div>
+
+        <button class="market-navbar__hamburger" id="marketNavbarHamburger" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+  <div id="mobileTray" class="mobile-tray">
+
+    <button class="tray-close-btn" id="closeTrayBtn">&times;</button>
+    <div class="tray-section" id="trayUserId">Your ID: <span id="trayUserEmail">Not logged in</span></div>
+    <!-- This goes inside your mobile drawer or menu -->
+    <button id="mobileInstallBtn" class="market-navbar__btn install-btn" style="display: none;">
+      <i class="fa-solid fa-download"></i> Install App
+    </button>
+    <!-- <button id="mobileInstallBtn" style="display: none;">Install App</button> -->
+    <button class="yellow-glass-btn" id="myOrdersBtn" style="display:none;">My Orders</button>
+
+
+    <button class="tray-btn" id="trayAdminBtn"><i class="fa fa-user-shield"></i> Admin</button>
+    <button class="tray-btn" id="trayLoginBtn"><i class="fa fa-sign-in-alt"></i> Login</button>
+    <button class="tray-btn" id="trayLogoutBtn" style="display:none;"><i class="fa fa-sign-out-alt"></i> Logout</button>
+<button class="tray-btn" id="trayCartBtn"><i class="fa fa-cart-shopping"></i> My Cart</button>
+  </div>
   <!-- 🌟 Review Modal -->
   <div id="reviewPopup" class="review-popup">
     <div class="review-content">
