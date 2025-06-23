@@ -977,3 +977,51 @@ textarea#userReview {
   background: linear-gradient(135deg, #43A047, #1B5E20);
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
+
+
+/* Hide by default */
+.upi-alert-mobile {
+  display: none;
+}
+@media (max-width: 420px) {
+  .upi-alert-mobile {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: linear-gradient(to right, #fff3f3, #fff9e6);
+    border: 2px solid #ffc107;
+    border-left: 6px solid #ff3b3b;
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #721c24;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(255, 59, 59, 0.2);
+    animation: flashAlert 0.5s ease;
+  }
+
+  .upi-alert-mobile i {
+    font-size: 1.5rem;
+    color: #e55300;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .upi-alert-text {
+    line-height: 1.4;
+  }
+
+  .danger-text {
+    color: #b10000;
+    font-weight: 700;
+    display: block;
+    margin-top: 6px;
+  }
+
+  @keyframes flashAlert {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
