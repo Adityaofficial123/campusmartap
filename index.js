@@ -744,7 +744,7 @@ setInterval(() => {
 // ✅ UNIVERSAL COUNTDOWN TIMER (Fixed for all users)
 const countdown = document.getElementById("countdownTimer");
 // Set your universal offer end date here 👇
-const offerEndDate = new Date("2025-06-24T00:00:00").getTime();
+const offerEndDate = new Date("2025-06-30T00:00:00").getTime();
 function updateCountdown() {
   const now = new Date().getTime();
   const distance = offerEndDate - now;
