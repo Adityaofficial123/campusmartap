@@ -3,7 +3,7 @@ import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
 
 import {
-  getDatabase, ref, push, onValue, remove
+  getDatabase, ref, push, onValue, remove, set
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 import {
   getAuth,
@@ -16,6 +16,7 @@ import {
   RecaptchaVerifier,
   GoogleAuthProvider,
   signInWithPopup
+
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 // ✅ Register service worker first
 if ("serviceWorker" in navigator) {
@@ -26,8 +27,6 @@ if ("serviceWorker" in navigator) {
   });
 }
 document.addEventListener("DOMContentLoaded", () => {
-
-
   const installBtn = document.getElementById("installBtn"); // desktop
   const mobileInstallBtn = document.getElementById("mobileInstallBtn"); // mobile
   const popup = document.getElementById("customInstallPrompt");
@@ -58,39 +57,44 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show buttons
     if (installBtn) installBtn.style.display = "inline-flex";
     if (mobileInstallBtn) mobileInstallBtn.style.display = "inline-flex";
-window.addEventListener("appinstalled", () => {
-  console.log("✅ App was installed");
-  if (installBtn) installBtn.style.display = "none";
-  if (mobileInstallBtn) mobileInstallBtn.style.display = "none";
+  });
 
-document.getElementById('marketNavbarSearchbar')?.classList.add('shrinked');
-document.getElementById('marketNavbarSearchbar')?.classList.remove('shrinked');
+  window.addEventListener("appinstalled", () => {
+    console.log("✅ App was installed");
+    if (installBtn) installBtn.style.display = "none";
+    if (mobileInstallBtn) mobileInstallBtn.style.display = "none";
+    // Optionally shrink searchbar or do other UI changes
+    const searchbar = document.getElementById('marketNavbarSearchbar');
+    if (searchbar) {
+      searchbar.classList.add('shrinked');
+      searchbar.classList.remove('shrinked');
+    }
+  });
 
-
-});
-
-    const handleInstall = (btn) => {
-      btn.addEventListener("click", () => {
-        if (!deferredPrompt) {
-          alert("⚠️ Install prompt not available.");
-          return;
-        }
-        if (popup) popup.style.display = "none";
-        btn.style.display = "none";
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choice) => {
-          console.log(choice.outcome === 'accepted' ? '✅ Installed' : '❌ Dismissed');
-          deferredPrompt = null;
-        });
+  const handleInstall = (btn) => {
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      if (!deferredPrompt) {
+        alert("⚠️ Install prompt not available.");
+        return;
+      }
+      if (popup) popup.style.display = "none";
+      btn.style.display = "none";
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choice) => {
+        console.log(choice.outcome === 'accepted' ? '✅ Installed' : '❌ Dismissed');
+        deferredPrompt = null;
       });
-    };
+    });
+  };
 
-    // Assign install handler
-    if (installBtn) handleInstall(installBtn);
-    if (mobileInstallBtn) handleInstall(mobileInstallBtn);
+  // Assign install handler
+  handleInstall(installBtn);
+  handleInstall(mobileInstallBtn);
 
+  if (installNowBtn) {
     installNowBtn.addEventListener("click", () => {
-      popup.style.display = "none";
+      if (popup) popup.style.display = "none";
       if (!deferredPrompt) {
         alert("⚠️ Install prompt not available.");
         return;
@@ -100,46 +104,25 @@ document.getElementById('marketNavbarSearchbar')?.classList.remove('shrinked');
         deferredPrompt = null;
       });
     });
+  }
 
-    if (dismissBtn) {
-      dismissBtn.addEventListener("click", () => {
-        popup.style.display = "none";
-      });
-    }
-  });
-});
-
-
-
-const app = initializeApp(firebaseConfig);
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging.js";
-
-const messaging = getMessaging(app);
-
-// Ask notification permission and get FCM token
-Notification.requestPermission().then((permission) => {
-  if (permission === "granted") {
-    getToken(messaging, {
-      vapidKey: "BDi_-1QEvrqMS0BV8nk-Z1SL93Zy5uz1Vv-wFAmFJAWLPgV3OA-1jKsqs2rA2Oy2zGPPpkX6nXnixTslTqYR33Q"
-    }).then((currentToken) => {
-      if (currentToken) {
-        console.log("✅ FCM Token:", currentToken);
-        // Optional: Save this token to Firebase if needed
-      } else {
-        console.warn("⚠️ No registration token available.");
-      }
-    }).catch((err) => {
-      console.error("❌ Error while getting token:", err);
+  if (dismissBtn) {
+    dismissBtn.addEventListener("click", () => {
+      if (popup) popup.style.display = "none";
     });
-  } else {
-    console.warn("❌ Notification permission denied.");
   }
 });
+// 🔔 Ask notification permission and get FCM token (only after login)
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging.js";
+// import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+// import { ref, set } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+const app = initializeApp(firebaseConfig); 
+const messaging = getMessaging();
 
-// Handle message while user is on the site
+// 📩 Handle foreground messages
 onMessage(messaging, (payload) => {
   console.log("📩 Message received:", payload);
-  alert(`🔔 ${payload.notification.title}\n${payload.notification.body}`);
+  alert(`🔔 ${payload.notification?.title}\n${payload.notification?.body}`);
 });
 
 const auth = getAuth(app);
@@ -196,6 +179,9 @@ onAuthStateChanged(auth, user => {
 
     if (mobileInstallBtn) mobileInstallBtn.style.display = 'none';
   }
+
+
+
 });
 
 
@@ -216,15 +202,14 @@ document.getElementById('trayLogoutBtn')?.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', function () {
   const tray = document.getElementById('mobileTray');
   const closeTrayBtn = document.getElementById('closeTrayBtn');
-// ...existing code...
-const trayCartBtn = document.getElementById('trayCartBtn');
-// Cart button
-if (trayCartBtn) {
-  trayCartBtn.onclick = function () {
-    window.location.href = 'cart.html';
-  };
-}
-// ...existing code...
+  const trayCartBtn = document.getElementById('trayCartBtn');
+  // Cart button
+  if (trayCartBtn) {
+    trayCartBtn.onclick = function () {
+      window.location.href = 'cart.html';
+    };
+  }
+
   const trayAdminBtn = document.getElementById('trayAdminBtn');
   const trayLoginBtn = document.getElementById('trayLoginBtn');
   const trayLogoutBtn = document.getElementById('trayLogoutBtn');
@@ -793,4 +778,47 @@ function updateCountdown() {
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
+// 10. NOTIFICATION PERMISSION & FCM TOKEN
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  // ... your UI logic ...
+
+  if (user) {
+    // Request notification permission and get token only after login
+    Notification.requestPermission().then((permission) => {
+      if (permission !== "granted") {
+        console.warn("❌ Notification permission denied.");
+        return;
+      }
+      navigator.serviceWorker.ready.then((registration) => {
+        getToken(messaging, {
+          vapidKey: "BDi_-1QEvrqMS0BV8nk-Z1SL93Zy5uz1Vv-wFAmFJAWLPgV3OA-1jKsqs2rA2Oy2zGPPpkX6nXnixTslTqYR33Q",
+          serviceWorkerRegistration: registration
+        })
+          .then((currentToken) => {
+            if (!currentToken) {
+              console.warn("⚠️ No registration token available.");
+              return;
+            }
+            console.log("✅ FCM Token:", currentToken);
+            // Save token directly
+            set(ref(db, "users/" + user.uid), {
+              email: user.email,
+              token: currentToken
+            })
+              .then(() => {
+                console.log("✅ Token saved to Realtime DB");
+              })
+              .catch((err) => {
+                console.error("❌ Failed to save token:", err);
+              });
+          })
+          .catch((err) => {
+            console.error("❌ Error getting FCM token:", err);
+          });
+      });
+    });
+  }
+});
 
