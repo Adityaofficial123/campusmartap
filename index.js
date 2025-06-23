@@ -1,6 +1,7 @@
 // 1. Imports
 import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+
 import {
   getDatabase, ref, push, onValue, remove
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
@@ -111,6 +112,36 @@ document.getElementById('marketNavbarSearchbar')?.classList.remove('shrinked');
 
 
 const app = initializeApp(firebaseConfig);
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging.js";
+
+const messaging = getMessaging(app);
+
+// Ask notification permission and get FCM token
+Notification.requestPermission().then((permission) => {
+  if (permission === "granted") {
+    getToken(messaging, {
+      vapidKey: "BDi_-1QEvrqMS0BV8nk-Z1SL93Zy5uz1Vv-wFAmFJAWLPgV3OA-1jKsqs2rA2Oy2zGPPpkX6nXnixTslTqYR33Q"
+    }).then((currentToken) => {
+      if (currentToken) {
+        console.log("✅ FCM Token:", currentToken);
+        // Optional: Save this token to Firebase if needed
+      } else {
+        console.warn("⚠️ No registration token available.");
+      }
+    }).catch((err) => {
+      console.error("❌ Error while getting token:", err);
+    });
+  } else {
+    console.warn("❌ Notification permission denied.");
+  }
+});
+
+// Handle message while user is on the site
+onMessage(messaging, (payload) => {
+  console.log("📩 Message received:", payload);
+  alert(`🔔 ${payload.notification.title}\n${payload.notification.body}`);
+});
+
 const auth = getAuth(app);
 const db = getDatabase(app);
 // ✅ Use only this ONE auth state listener (merge all logic here)
