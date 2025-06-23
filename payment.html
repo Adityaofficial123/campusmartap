@@ -405,9 +405,8 @@
         console.log("🔥 Submitting payment data:", paymentData);
 
         await set(ref(db, 'payments/' + customPayId), paymentData);
-      
 
-const cartProduct = {
+        const cartProduct = {
   product_name: paymentData.productName,
   price: paymentData.amount,
   category: product.category,
@@ -417,10 +416,7 @@ const cartProduct = {
   buyerConfirmed: false, // for confirmation button in cart
   timestamp: paymentData.timestamp
 };
-
-// Add to user's cart
 await set(ref(db, `carts/${user.uid}/${customPayId}`), cartProduct);
-
         // ✅ Notify Admin
         emailjs.send("service_e32z7z5", "template_1iq1q95", {
           buyer_name: paymentData.buyer_name,
@@ -509,10 +505,30 @@ await set(ref(db, `carts/${user.uid}/${customPayId}`), cartProduct);
       document.getElementById("proofSuccessPopup").style.display = "none";
     };
 
+    let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+});
+
+document.getElementById("upiPayButton").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  if (!currentUser) {
+    alert("⚠️ Please log in to make a payment.");
+    window.location.href = "index.html#loginModal";
+    return;
+  }
+
+  // ✅ If logged in, show UPI QR Popup
+  document.getElementById("qrPopup").style.display = "flex";
+});
+
+
   </script>
 
   <script>
-   // Example for dynamic footer loading
+// Example for dynamic footer loading
 fetch('footer.html')
   .then(res => res.text())
   .then(html => {
