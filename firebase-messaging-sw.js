@@ -7,7 +7,7 @@ firebase.initializeApp({
    projectId: "marketplace-378f6",
   messagingSenderId: "519512596002",
   appId: "1:519512596002:web:b4cd5978ffa111ef55b47b"
-  authDomain: "marketplace-378f6.firebaseapp.com",
+ 
 });
 
 const messaging = firebase.messaging();
