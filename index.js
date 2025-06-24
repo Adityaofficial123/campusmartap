@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
       window.location.href = 'cart.html';
     };
   }
+  
 
   const trayAdminBtn = document.getElementById('trayAdminBtn');
   const trayLoginBtn = document.getElementById('trayLoginBtn');
@@ -411,7 +412,8 @@ form.addEventListener('submit', async e => {
 
     const modalHtml = `
   <div id="paymentPromptModal" class="modal" style="display:block;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5);">
-    <div style="background:white;padding:20px;margin:auto;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:90%;max-width:500px;text-align:center;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+    <div style="background:white;padding:20px;margin:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,
+    -50%);width:90%;max-width:500px;text-align:center;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
       <span id="closePaymentModal" style="position:absolute;top:10px;right:20px;cursor:pointer;font-size:24px">&times;</span>
       <h2>Complete Your Listing</h2>
        <p>Please pay ₹${fee} to list your product.</p>
@@ -821,4 +823,39 @@ onAuthStateChanged(auth, user => {
     });
   }
 });
+
+function updateNotifyFabVisibility() {
+  const fab = document.getElementById("enableNotifyFab");
+  if (!fab) return;
+  // Only show on mobile and if not granted
+  if (window.innerWidth <= 420 && window.Notification && Notification.permission !== "granted") {
+    fab.style.display = "flex";
+  } else {
+    fab.style.display = "none";
+  }
+}
+window.addEventListener("DOMContentLoaded", updateNotifyFabVisibility);
+window.addEventListener("resize", updateNotifyFabVisibility);
+document.addEventListener("visibilitychange", updateNotifyFabVisibility);
+
+document.getElementById("enableNotifyFab").onclick = function() {
+  if (!window.Notification) {
+    alert("Notifications are not supported in your browser.");
+    return;
+  }
+  Notification.requestPermission().then(permission => {
+    updateNotifyFabVisibility();
+    if (permission === "granted") {
+      // Optionally: get FCM token here
+    } else if (permission === "denied") {
+      // Show help popup
+      document.getElementById("notifyHelpPopup").style.display = "flex";
+    }
+  });
+};
+
+// Close help popup
+document.getElementById("closeNotifyHelp").onclick = function() {
+  document.getElementById("notifyHelpPopup").style.display = "none";
+};
 
