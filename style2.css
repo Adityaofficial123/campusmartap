@@ -978,7 +978,6 @@ textarea#userReview {
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
-
 /* Hide by default */
 .upi-alert-mobile {
   display: none;
@@ -1024,4 +1023,3 @@ textarea#userReview {
     to { opacity: 1; transform: translateY(0); }
   }
 }
-
