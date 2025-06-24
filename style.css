@@ -1568,3 +1568,38 @@ font-weight: 700;
     border-radius: 8px !important;
   }
 }
+
+/* Only show the notification button on mobile (max-width: 420px) */
+#enableNotifyFab {
+  display: none !important;
+  position: static !important;
+  bottom: unset !important;
+  right: unset !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  height: auto !important;
+  padding: 10px 18px !important;
+  border-radius: 8px !important;
+  margin: 8px 0 !important;
+}
+@media (max-width: 420px) {
+  #enableNotifyFab {
+    display: flex !important;
+  }
+}
+
+/* Keep tray style for the button */
+#enableNotifyFab.tray-btn {
+  background: linear-gradient(135deg, #ffb74d, #ffd86f 80%);
+  color: #232323;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  margin: 8px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+}
