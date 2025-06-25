@@ -510,15 +510,18 @@
 
         await set(ref(db, 'payments/' + customPayId), paymentData);
 
-        const cartProduct = {
+const cartProduct = {
   product_name: paymentData.productName,
   price: paymentData.amount,
   category: product.category,
   image_url: product.image_url,
   productId: paymentData.productId,
   payId: paymentData.payId,
-  buyerConfirmed: false, // for confirmation button in cart
-  timestamp: paymentData.timestamp
+  buyerConfirmed: false,
+  timestamp: paymentData.timestamp,
+  // Add these lines:
+  buyer_name: paymentData.buyer_name || paymentData.name || "Unknown",
+  buyer_email: paymentData.buyer_email || paymentData.email || "-"
 };
 await set(ref(db, `carts/${user.uid}/${customPayId}`), cartProduct);
         // ✅ Notify Admin
